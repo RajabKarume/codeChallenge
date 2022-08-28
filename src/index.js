@@ -1,7 +1,8 @@
 // write your code here
 let likeButton = document.getElementById("like-button")
-let likeCount = document.getElementById("like-count").value
+let likeCount = document.getElementsByClassName("likes")[0].innerHTML[0];
 let commentForm = document.getElementById("comment-form")
+span = document.getElementById("like-count");
 
 function getImages(){
     fetch('http://localhost:3000/images/1') 
@@ -12,8 +13,6 @@ function getImages(){
         document.getElementById("card-image").alt = data.title;
     });
 }
-getImages();
-
 
 function getComments(){
     fetch(`http://localhost:3000/images/1/comments/`)
@@ -24,19 +23,31 @@ function getComments(){
             let arr = data[i].content;
             comments.push(arr)
         }
-        console.log(comments)
+        // console.log(comments)
         document.getElementById("comments-list").innerHTML = comments.map((comments) =>`<li>${comments}</li>`).join("")
     })
 }
-getComments(); 
+
+document.addEventListener("DOMContentLoaded", () => {
+    getImages()
+    getComments()
+    commentForm.addEventListener("submit", (e) => {e.preventDefault()
+        let newComment = document.getElementById("comment").value;
+        document.getElementById("comment-form").innerHTML += `<li>${newComment}</li>`;
+        });
+        likeButton.addEventListener("click", (e) =>{e.preventDefault()
+            likeCount = parseInt(likeCount)+1;
+            span.innerText = `${likeCount} likes`;
+            // console.log(likeCount)
+            // console.log(counter)
+        })
+    
+})
 
 
-commentForm.addEventListener("submit", (e) => {e.preventDefault()
-    let newComment = document.getElementById("comment").value;
-    document.getElementById("comment-form").innerHTML += `<li>${newComment}</li>`;
-    });
 
-// likeCount.addEventListener("click", () => )
-console.log(likeCount)
+
+
+
 
 
